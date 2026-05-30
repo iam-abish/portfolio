@@ -3,20 +3,196 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Abish Packya – Platform Engineer | Azure Cloud | Linux | DevOps">
+  <meta name="description" content="Abish Packya - Platform Engineer | Azure Cloud | Linux | DevOps">
   <title>Abish Packya | Platform Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --azure:#0078d4;--azure-light:#50a0e0;--azure-dim:rgba(0,120,212,0.1);--azure-border:rgba(0,120,212,0.3);
+  --bg:#0a0d14;--bg-card:#111520;--bg-elevated:#161b28;
+  --border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.12);
+  --text:#e8eaf0;--text-muted:#7b8299;--text-dim:#4a5068;
+  --green:#22c55e;--amber:#f59e0b;
+  --font-ui:'Sora',sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
+.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(0,120,212,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,120,212,0.04) 1px,transparent 1px);
+  background-size:48px 48px}
+.grid-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,120,212,0.08) 0%,transparent 70%)}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(10,13,20,0.88);backdrop-filter:blur(16px)}
+.nav-container{max-width:1100px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--font-mono);font-weight:600;font-size:.9rem;color:var(--azure);letter-spacing:.05em;border:1px solid var(--azure-border);padding:5px 12px;border-radius:6px}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:.85rem;color:var(--text-muted);text-decoration:none;letter-spacing:.02em;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;z-index:1;padding:120px 2rem 80px}
+.hero-content{max-width:1100px;margin:0 auto;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.78rem;color:var(--azure-light);background:var(--azure-dim);border:1px solid var(--azure-border);padding:6px 16px;border-radius:100px;margin-bottom:2rem;letter-spacing:.03em}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex-shrink:0}
+.hero-title{font-size:clamp(3rem,7vw,5.5rem);font-weight:700;line-height:1.05;letter-spacing:-.03em;margin-bottom:1.5rem}
+.hero-title .name-line{display:block;background:linear-gradient(135deg,#fff 0%,var(--azure-light) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.typing-container{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.95rem;color:var(--text-muted);margin-bottom:1.5rem;height:28px}
+.typing-prefix{color:var(--azure)}
+.cursor{color:var(--azure);animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-description{font-size:1.05rem;color:var(--text-muted);max-width:560px;line-height:1.8;margin-bottom:2.5rem}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-ui);font-size:.88rem;font-weight:500;padding:12px 24px;border-radius:8px;text-decoration:none;transition:all .2s;cursor:pointer;border:none;letter-spacing:.01em}
+.btn-primary{background:var(--azure);color:#fff}
+.btn-primary:hover{background:var(--azure-light);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--azure-border);color:var(--azure-light)}
+.btn-large{padding:13px 28px;font-size:.93rem}
+
+.floating-icons{position:absolute;right:6%;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:2.5rem;opacity:.3;pointer-events:none}
+.float-icon{animation:floatY var(--duration,20s) ease-in-out var(--delay,0s) infinite alternate}
+@keyframes floatY{from{transform:translateY(-14px)}to{transform:translateY(14px)}}
+
+main{position:relative;z-index:1}
+.section{padding:100px 2rem}
+.section-dark{background:var(--bg-elevated);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.container{max-width:1100px;margin:0 auto;width:100%}
+.section-header{margin-bottom:56px}
+.section-tag{display:block;font-family:var(--font-mono);font-size:.75rem;color:var(--azure);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.1}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.lead{font-size:1.15rem;font-weight:500;color:var(--text);margin-bottom:1.25rem;line-height:1.65}
+.about-content p{font-size:.95rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.85}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:2rem}
+.stat-item{background:var(--bg-card);padding:20px 12px;text-align:center}
+.stat-value{font-family:var(--font-mono);font-size:1.3rem;font-weight:600;color:var(--azure-light);margin-bottom:4px}
+.stat-label{font-size:.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em}
+
+.terminal-preview{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#0d1117;font-family:var(--font-mono);position:sticky;top:80px}
+.terminal-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#161b22;border-bottom:1px solid var(--border)}
+.terminal-dots{display:flex;gap:6px}
+.terminal-dots span{width:12px;height:12px;border-radius:50%}
+.terminal-dots span:nth-child(1){background:#ff5f57}
+.terminal-dots span:nth-child(2){background:#febc2e}
+.terminal-dots span:nth-child(3){background:#28c840}
+.terminal-title{font-size:.75rem;color:var(--text-dim);margin:0 auto;letter-spacing:.03em}
+.terminal-body{padding:20px;min-height:280px;font-size:.8rem;line-height:1.9}
+.terminal-body pre{white-space:pre-wrap;color:#7ee787;word-break:break-all}
+
+/* SKILLS */
+.skills-categories{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.skill-category{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:28px 22px;transition:border-color .2s}
+.skill-category:hover{border-color:var(--azure-border)}
+.category-title{display:flex;align-items:center;gap:10px;font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.category-title svg{color:var(--azure);flex-shrink:0}
+.skills-list{display:flex;flex-direction:column;gap:8px}
+.skill-tag{font-size:.8rem;color:var(--text-muted);background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:9px 13px;font-family:var(--font-mono);transition:all .2s;cursor:default}
+.skill-tag:hover{border-color:var(--azure-border);color:var(--azure-light);background:var(--azure-dim)}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.project-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:28px 22px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s,transform .25s}
+.project-card:hover{border-color:var(--azure-border);transform:translateY(-3px)}
+.project-header{display:flex;align-items:flex-start;justify-content:space-between}
+.project-icon{width:42px;height:42px;border-radius:10px;background:var(--azure-dim);border:1px solid var(--azure-border);display:flex;align-items:center;justify-content:center;color:var(--azure-light);flex-shrink:0}
+.project-status{font-family:var(--font-mono);font-size:.7rem;padding:4px 10px;border-radius:100px;letter-spacing:.04em;white-space:nowrap}
+.project-card:nth-child(1) .project-status{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+.project-card:nth-child(2) .project-status{background:var(--azure-dim);color:var(--azure-light);border:1px solid var(--azure-border)}
+.project-card:nth-child(3) .project-status{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
+.project-title{font-size:.97rem;font-weight:600;color:#fff;letter-spacing:-.01em;line-height:1.35}
+.project-description{font-size:.85rem;color:var(--text-muted);line-height:1.8;flex:1}
+.project-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:4px}
+.project-tags span{font-family:var(--font-mono);font-size:.7rem;color:var(--text-dim);background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px;padding:4px 9px;letter-spacing:.03em}
+
+/* DASHBOARD */
+.dashboard{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+.dashboard-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:24px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.card-header h4{font-size:.88rem;font-weight:600;color:var(--text)}
+.status-dot{width:8px;height:8px;border-radius:50%}
+.status-dot.healthy{background:var(--green);box-shadow:0 0 8px var(--green)}
+.region-count{font-family:var(--font-mono);font-size:.72rem;color:var(--azure-light);background:var(--azure-dim);border:1px solid var(--azure-border);padding:3px 10px;border-radius:100px}
+
+.metrics{display:flex;flex-direction:column;gap:16px}
+.metric{display:grid;grid-template-columns:80px 1fr 38px;align-items:center;gap:12px}
+.metric-label{font-size:.77rem;color:var(--text-muted);font-family:var(--font-mono)}
+.progress-bar{height:4px;background:var(--bg-elevated);border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;border-radius:100px;background:var(--azure)}
+.cpu-progress{width:67%}.memory-progress{width:52%}.disk-progress{width:34%}
+.metric-value{font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);text-align:right}
+
+.pipeline-steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:var(--bg-elevated);border:1px solid var(--border)}
+.step-icon{font-size:.82rem;width:22px;text-align:center;font-family:var(--font-mono);flex-shrink:0}
+.step.completed{border-color:rgba(34,197,94,.2)}.step.completed .step-icon{color:var(--green)}
+.step.running{border-color:var(--azure-border)}.step.running .step-icon{color:var(--azure-light)}
+.step.pending .step-icon{color:var(--text-dim)}
+.step-info{display:flex;align-items:center;justify-content:space-between;flex:1}
+.step-name{font-size:.82rem;color:var(--text);font-weight:500}
+.step-time{font-family:var(--font-mono);font-size:.73rem;color:var(--text-dim)}
+.spinner{animation:spin 1.2s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.regions-map{position:relative;height:130px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.region-marker{position:absolute;transform:translate(-50%,-50%)}
+.pulse{width:10px;height:10px;border-radius:50%;background:var(--azure);position:relative}
+.pulse::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--azure);animation:pulseAnim 2s ease-out infinite;opacity:0}
+@keyframes pulseAnim{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.5);opacity:0}}
+.region-label{font-family:var(--font-mono);font-size:.65rem;color:var(--azure-light);position:absolute;top:14px;left:50%;transform:translateX(-50%);white-space:nowrap;letter-spacing:.05em}
+
+.cluster-viz{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cluster-node{background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:12px}
+.node-header{font-family:var(--font-mono);font-size:.72rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.04em}
+.pods{display:flex;flex-direction:column;gap:6px}
+.pod{font-family:var(--font-mono);font-size:.7rem;padding:5px 10px;border-radius:5px;border:1px solid}
+.pod.running{color:var(--green);background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2)}
+.pod.pending{color:var(--amber);background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2)}
+
+/* CONTACT */
+.contact-content{max-width:580px}
+.contact-lead{font-size:1.05rem;color:var(--text-muted);line-height:1.8;margin-bottom:2.5rem}
+.contact-methods{display:flex;flex-direction:column;gap:12px;margin-bottom:2rem}
+.contact-method{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;text-decoration:none;transition:border-color .2s,transform .2s}
+.contact-method:hover{border-color:var(--azure-border);transform:translateX(4px)}
+.method-icon{width:40px;height:40px;background:var(--azure-dim);border:1px solid var(--azure-border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--azure-light);flex-shrink:0}
+.method-label{font-size:.7rem;color:var(--text-dim);margin-bottom:2px;font-family:var(--font-mono);letter-spacing:.06em}
+.method-value{font-size:.9rem;color:var(--text);font-weight:500}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:40px 2rem;position:relative;z-index:1}
+.footer-content{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-logo{font-weight:700;font-size:.97rem;color:#fff;letter-spacing:-.01em;margin-bottom:4px}
+.footer-tagline{font-family:var(--font-mono);font-size:.73rem;color:var(--text-dim);letter-spacing:.03em}
+.footer-right{text-align:right}
+.footer-right p{font-size:.8rem;color:var(--text-dim)}
+.footer-tech{font-family:var(--font-mono);font-size:.72rem;margin-top:4px;color:var(--azure)}
+
+@media(max-width:900px){
+  .about-grid,.skills-categories,.projects-grid{grid-template-columns:1fr}
+  .dashboard{grid-template-columns:1fr}
+  .floating-icons{display:none}
+  .terminal-preview{position:static}
+  .stats-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .nav-links{gap:1.2rem}
+  .section{padding:60px 1.25rem}
+  .hero{padding:90px 1.25rem 50px}
+  .hero-cta,.footer-content{flex-direction:column}
+  .footer-right{text-align:left}
+}
+</style>
+</head>
 <body>
 
-<!-- Animated Grid Background -->
 <div class="grid-bg" aria-hidden="true"></div>
 
-<!-- Navigation -->
 <nav class="nav">
   <div class="nav-container">
     <div class="logo">AP</div>
@@ -29,16 +205,15 @@
   </div>
 </nav>
 
-<!-- Hero Section -->
 <header class="hero" id="home">
   <div class="hero-content">
     <div class="hero-badge">Joining FutecX as Platform Engineer</div>
     <h1 class="hero-title">
-      <span class="gradient-text">Abish Packya</span>
+      <span class="name-line">Abish Packya</span>
     </h1>
     <div class="typing-container">
-      <span class="typing-prefix">$</span>
-      <span class="typing"></span>
+      <span class="typing-prefix">$&nbsp;</span>
+      <span id="typing-text"></span>
       <span class="cursor">_</span>
     </div>
     <p class="hero-description">
@@ -49,40 +224,20 @@
       <a href="#projects" class="btn btn-secondary">View Projects</a>
     </div>
   </div>
-  
-  <!-- Floating Elements -->
-  <div class="floating-icons">
-    <div class="float-icon" style="--delay: 0s; --duration: 20s;">
+  <div class="floating-icons" aria-hidden="true">
+    <div class="float-icon" style="--delay:0s;--duration:20s;">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <path d="M24 4L6 14v10c0 11.04 7.56 21.36 18 24 10.44-2.64 18-12.96 18-24V14L24 4z" fill="url(#docker-gradient)"/>
-        <defs>
-          <linearGradient id="docker-gradient" x1="6" y1="4" x2="42" y2="44">
-            <stop offset="0%" stop-color="#0db7ed"/>
-            <stop offset="100%" stop-color="#2496ed"/>
-          </linearGradient>
-        </defs>
+        <path d="M24 4L6 14v10c0 11.04 7.56 21.36 18 24 10.44-2.64 18-12.96 18-24V14L24 4z" fill="#2496ed" opacity=".85"/>
       </svg>
     </div>
-    <div class="float-icon" style="--delay: 5s; --duration: 25s;">
+    <div class="float-icon" style="--delay:5s;--duration:25s;">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="20" fill="url(#azure-gradient)"/>
-        <defs>
-          <linearGradient id="azure-gradient" x1="4" y1="4" x2="44" y2="44">
-            <stop offset="0%" stop-color="#0078d4"/>
-            <stop offset="100%" stop-color="#50a0e0"/>
-          </linearGradient>
-        </defs>
+        <rect x="8" y="8" width="32" height="32" rx="8" fill="#0078d4" opacity=".85"/>
       </svg>
     </div>
-    <div class="float-icon" style="--delay: 10s; --duration: 30s;">
+    <div class="float-icon" style="--delay:10s;--duration:30s;">
       <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <rect x="8" y="12" width="32" height="24" rx="2" fill="url(#linux-gradient)"/>
-        <defs>
-          <linearGradient id="linux-gradient" x1="8" y1="12" x2="40" y2="36">
-            <stop offset="0%" stop-color="#f5a623"/>
-            <stop offset="100%" stop-color="#e08000"/>
-          </linearGradient>
-        </defs>
+        <circle cx="24" cy="24" r="20" fill="#f5a623" opacity=".75"/>
       </svg>
     </div>
   </div>
@@ -90,7 +245,6 @@
 
 <main>
 
-<!-- About Section -->
 <section class="section" id="about">
   <div class="container">
     <div class="section-header">
@@ -99,19 +253,13 @@
     </div>
     <div class="about-grid">
       <div class="about-content">
-        <p class="lead">
-          Aspiring Platform Engineer focused on cloud infrastructure, automation, and operational excellence.
-        </p>
-        <p>
-          My experience includes Linux administration, containerized applications, CI/CD automation, infrastructure planning, and deployment workflows. I enjoy building reliable systems and automating repetitive processes.
-        </p>
-        <p>
-          Currently beginning my professional journey as a Platform Engineer at FutecX, where I will be working with Azure cloud environments, infrastructure operations, and platform engineering practices.
-        </p>
+        <p class="lead">Aspiring Platform Engineer focused on cloud infrastructure, automation, and operational excellence.</p>
+        <p>My experience includes Linux administration, containerized applications, CI/CD automation, infrastructure planning, and deployment workflows. I enjoy building reliable systems and automating repetitive processes.</p>
+        <p>Currently beginning my professional journey as a Platform Engineer at FutecX, where I will be working with Azure cloud environments, infrastructure operations, and platform engineering practices.</p>
         <div class="stats-grid">
           <div class="stat-item">
             <div class="stat-value">10+</div>
-            <div class="stat-label">Infrastructure Projects</div>
+            <div class="stat-label">Infra Projects</div>
           </div>
           <div class="stat-item">
             <div class="stat-value">Azure</div>
@@ -125,52 +273,42 @@
       </div>
       <div class="terminal-preview">
         <div class="terminal-header">
-          <div class="terminal-dots">
-            <span></span><span></span><span></span>
-          </div>
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
           <div class="terminal-title">~abish@platform</div>
         </div>
         <div class="terminal-body">
-          <pre id="terminal"></pre>
+          <pre id="terminal-out"></pre>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Skills Section -->
 <section class="section section-dark" id="skills">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">// TECH STACK</span>
       <h2 class="section-title">Technical Skills</h2>
     </div>
-    
     <div class="skills-categories">
       <div class="skill-category">
         <h3 class="category-title">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M20 7h-9M14 17H5M15 3L9 21" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          Cloud & Infrastructure
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 7h-9M14 17H5M15 3L9 21"/></svg>
+          Cloud &amp; Infrastructure
         </h3>
         <div class="skills-list">
           <div class="skill-tag">Microsoft Azure</div>
           <div class="skill-tag">Azure Virtual Machines</div>
           <div class="skill-tag">Azure Storage</div>
           <div class="skill-tag">Azure Networking</div>
-          <div class="skill-tag">Docker & Docker Compose</div>
+          <div class="skill-tag">Docker &amp; Docker Compose</div>
           <div class="skill-tag">Linux Administration</div>
         </div>
       </div>
-      
       <div class="skill-category">
         <h3 class="category-title">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="10" stroke-width="2"/>
-            <path d="M12 6v6l4 2" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          CI/CD & Automation
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          CI/CD &amp; Automation
         </h3>
         <div class="skills-list">
           <div class="skill-tag">GitHub Actions</div>
@@ -179,17 +317,13 @@
           <div class="skill-tag">Python Automation</div>
         </div>
       </div>
-      
       <div class="skill-category">
         <h3 class="category-title">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
-            <path d="M9 3v18M3 9h18M3 15h18" stroke-width="2"/>
-          </svg>
-          Development & Tools
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18M3 15h18"/></svg>
+          Development &amp; Tools
         </h3>
         <div class="skills-list">
-          <div class="skill-tag">Git & GitHub</div>
+          <div class="skill-tag">Git &amp; GitHub</div>
           <div class="skill-tag">Python</div>
           <div class="skill-tag">Bash</div>
           <div class="skill-tag">PostgreSQL</div>
@@ -201,88 +335,62 @@
   </div>
 </section>
 
-<!-- Projects Section -->
 <section class="section" id="projects">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">// WHAT I'VE BUILT</span>
       <h2 class="section-title">Featured Projects</h2>
     </div>
-    
     <div class="projects-grid">
       <article class="project-card">
         <div class="project-header">
           <div class="project-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor">
-              <circle cx="16" cy="16" r="12" stroke-width="2"/>
-              <path d="M16 8v8l4 4" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
           </div>
           <span class="project-status">Active</span>
         </div>
         <h3 class="project-title">Political Intelligence Platform</h3>
-        <p class="project-description">
-          A large-scale intelligence platform built using a microservice architecture with PostgreSQL, Kafka, Elasticsearch, Neo4j, Docker, and modern DevOps practices.
-        </p>
+        <p class="project-description">A large-scale intelligence platform built using a microservice architecture with PostgreSQL, Kafka, Elasticsearch, Neo4j, Docker, and modern DevOps practices.</p>
         <div class="project-tags">
-          <span>Kafka</span>
-          <span>PostgreSQL</span>
-          <span>Docker</span>
+          <span>Kafka</span><span>PostgreSQL</span><span>Docker</span>
         </div>
       </article>
-      
       <article class="project-card">
         <div class="project-header">
           <div class="project-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor">
-              <rect x="6" y="8" width="20" height="16" rx="2" stroke-width="2"/>
-              <path d="M6 12h20M11 16h10" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M4 10h16"/></svg>
           </div>
           <span class="project-status">Completed</span>
         </div>
         <h3 class="project-title">College Lab Infrastructure Design</h3>
-        <p class="project-description">
-          Designed centralized infrastructure solutions for educational environments including networking, servers, storage, virtualization, and management workflows.
-        </p>
+        <p class="project-description">Designed centralized infrastructure solutions for educational environments including networking, servers, storage, virtualization, and management workflows.</p>
         <div class="project-tags">
-          <span>Infrastructure</span>
-          <span>Networking</span>
-          <span>Virtualization</span>
+          <span>Infrastructure</span><span>Networking</span><span>Virtualization</span>
         </div>
       </article>
-      
       <article class="project-card">
         <div class="project-header">
           <div class="project-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor">
-              <path d="M16 4L4 10v8c0 7.36 5.04 14.24 12 16 6.96-1.76 12-8.64 12-16v-8L16 4z" stroke-width="2"/>
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3L3 8v5c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V8L12 3z"/></svg>
           </div>
           <span class="project-status">In Progress</span>
         </div>
         <h3 class="project-title">DevOps Homelab</h3>
-        <p class="project-description">
-          Personal infrastructure environment used for learning Linux administration, Docker, automation, networking, and deployment workflows.
-        </p>
+        <p class="project-description">Personal infrastructure environment used for learning Linux administration, Docker, automation, networking, and deployment workflows.</p>
         <div class="project-tags">
-          <span>Linux</span>
-          <span>Docker</span>
-          <span>Automation</span>
+          <span>Linux</span><span>Docker</span><span>Automation</span>
         </div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- Visualization Section -->
 <section class="section section-dark">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">// LIVE METRICS</span>
       <h2 class="section-title">Infrastructure Dashboard</h2>
     </div>
-    
     <div class="dashboard">
       <div class="dashboard-card">
         <div class="card-header">
@@ -292,28 +400,21 @@
         <div class="metrics">
           <div class="metric">
             <div class="metric-label">CPU Usage</div>
-            <div class="progress-bar">
-              <div class="progress-fill cpu-progress"></div>
-            </div>
+            <div class="progress-bar"><div class="progress-fill cpu-progress"></div></div>
             <div class="metric-value">67%</div>
           </div>
           <div class="metric">
             <div class="metric-label">Memory</div>
-            <div class="progress-bar">
-              <div class="progress-fill memory-progress"></div>
-            </div>
+            <div class="progress-bar"><div class="progress-fill memory-progress"></div></div>
             <div class="metric-value">52%</div>
           </div>
           <div class="metric">
             <div class="metric-label">Disk I/O</div>
-            <div class="progress-bar">
-              <div class="progress-fill disk-progress"></div>
-            </div>
+            <div class="progress-bar"><div class="progress-fill disk-progress"></div></div>
             <div class="metric-value">34%</div>
           </div>
         </div>
       </div>
-      
       <div class="dashboard-card">
         <div class="card-header">
           <h4>Deployment Pipeline</h4>
@@ -321,57 +422,43 @@
         </div>
         <div class="pipeline-steps">
           <div class="step completed">
-            <div class="step-icon">✓</div>
-            <div class="step-info">
-              <div class="step-name">Build</div>
-              <div class="step-time">2m 14s</div>
-            </div>
+            <div class="step-icon">&#10003;</div>
+            <div class="step-info"><div class="step-name">Build</div><div class="step-time">2m 14s</div></div>
           </div>
           <div class="step completed">
-            <div class="step-icon">✓</div>
-            <div class="step-info">
-              <div class="step-name">Test</div>
-              <div class="step-time">4m 32s</div>
-            </div>
+            <div class="step-icon">&#10003;</div>
+            <div class="step-info"><div class="step-name">Test</div><div class="step-time">4m 32s</div></div>
           </div>
           <div class="step running">
-            <div class="step-icon spinner">◌</div>
-            <div class="step-info">
-              <div class="step-name">Deploy</div>
-              <div class="step-time">1m 08s</div>
-            </div>
+            <div class="step-icon spinner">&#9676;</div>
+            <div class="step-info"><div class="step-name">Deploy</div><div class="step-time">1m 08s</div></div>
           </div>
           <div class="step pending">
-            <div class="step-icon">○</div>
-            <div class="step-info">
-              <div class="step-name">Verify</div>
-              <div class="step-time">--</div>
-            </div>
+            <div class="step-icon">&#9675;</div>
+            <div class="step-info"><div class="step-name">Verify</div><div class="step-time">--</div></div>
           </div>
         </div>
       </div>
-      
       <div class="dashboard-card">
         <div class="card-header">
           <h4>Global Regions</h4>
           <span class="region-count">3 Active</span>
         </div>
         <div class="regions-map">
-          <div class="region-marker" style="left: 20%; top: 45%;">
+          <div class="region-marker" style="left:20%;top:52%;">
             <div class="pulse"></div>
             <span class="region-label">US-EAST</span>
           </div>
-          <div class="region-marker" style="left: 48%; top: 35%;">
+          <div class="region-marker" style="left:47%;top:38%;">
             <div class="pulse"></div>
             <span class="region-label">EU-WEST</span>
           </div>
-          <div class="region-marker" style="left: 75%; top: 50%;">
+          <div class="region-marker" style="left:76%;top:55%;">
             <div class="pulse"></div>
             <span class="region-label">AP-SOUTH</span>
           </div>
         </div>
       </div>
-      
       <div class="dashboard-card">
         <div class="card-header">
           <h4>Container Cluster</h4>
@@ -381,17 +468,17 @@
           <div class="cluster-node">
             <div class="node-header">Node 1</div>
             <div class="pods">
-              <div class="pod running">Pod</div>
-              <div class="pod running">Pod</div>
-              <div class="pod running">Pod</div>
+              <div class="pod running">Pod A</div>
+              <div class="pod running">Pod B</div>
+              <div class="pod running">Pod C</div>
             </div>
           </div>
           <div class="cluster-node">
             <div class="node-header">Node 2</div>
             <div class="pods">
-              <div class="pod running">Pod</div>
-              <div class="pod pending">Pod</div>
-              <div class="pod running">Pod</div>
+              <div class="pod running">Pod D</div>
+              <div class="pod pending">Pod E</div>
+              <div class="pod running">Pod F</div>
             </div>
           </div>
         </div>
@@ -400,95 +487,99 @@
   </div>
 </section>
 
-<!-- Contact Section -->
 <section class="section" id="contact">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">// GET IN TOUCH</span>
       <h2 class="section-title">Let's Connect</h2>
     </div>
-    
     <div class="contact-content">
-      <div class="contact-info">
-        <p class="contact-lead">
-          Interested in cloud infrastructure, platform engineering, Azure technologies, and automation. Feel free to connect for collaborations, opportunities, or technical discussions.
-        </p>
-        
-        <div class="contact-methods">
-          <a href="mailto:abishpackya15@gmail.com" class="contact-method">
-            <div class="method-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="3" y="5" width="18" height="14" rx="2" stroke-width="2"/>
-                <path d="M3 7l9 6 9-6" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="method-details">
-              <div class="method-label">Email</div>
-              <div class="method-value">abishpackya15@gmail.com</div>
-            </div>
-          </a>
-          
-          <a href="https://github.com/iam-abish" target="_blank" rel="noopener noreferrer" class="contact-method">
-            <div class="method-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
-              </svg>
-            </div>
-            <div class="method-details">
-              <div class="method-label">GitHub</div>
-              <div class="method-value">iam-abish</div>
-            </div>
-          </a>
-        </div>
-        
-        <a href="abish_resume.pdf" download class="btn btn-primary btn-large">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-            <path d="M10 3v10m0 0l-4-4m4 4l4-4M3 17h14" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          Download Resume
+      <p class="contact-lead">Interested in cloud infrastructure, platform engineering, Azure technologies, and automation. Feel free to connect for collaborations, opportunities, or technical discussions.</p>
+      <div class="contact-methods">
+        <a href="mailto:abishpackya15@gmail.com" class="contact-method">
+          <div class="method-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </div>
+          <div class="method-details">
+            <div class="method-label">EMAIL</div>
+            <div class="method-value">abishpackya15@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://github.com/iam-abish" target="_blank" rel="noopener noreferrer" class="contact-method">
+          <div class="method-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          </div>
+          <div class="method-details">
+            <div class="method-label">GITHUB</div>
+            <div class="method-value">iam-abish</div>
+          </div>
         </a>
       </div>
+      <a href="abish_resume.pdf" download class="btn btn-primary btn-large">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 3v10m0 0l-4-4m4 4l4-4M3 17h14"/></svg>
+        Download Resume
+      </a>
     </div>
   </div>
 </section>
 
 </main>
 
-<!-- Footer -->
 <footer class="footer">
-  <div class="container">
-    <div class="footer-content">
-      <div class="footer-left">
-        <div class="footer-logo">Abish Packya</div>
-        <p class="footer-tagline">Platform Engineering • Azure Cloud • Infrastructure Automation</p>
-      </div>
-      <div class="footer-right">
-        <p>&copy; 2026 Abish Packya. All rights reserved.</p>
-        <p class="footer-tech">Built with passion for Platform Engineering</p>
-      </div>
+  <div class="footer-content">
+    <div>
+      <div class="footer-logo">Abish Packya</div>
+      <p class="footer-tagline">Platform Engineering &bull; Azure Cloud &bull; Infrastructure Automation</p>
+    </div>
+    <div class="footer-right">
+      <p>&copy; 2026 Abish Packya. All rights reserved.</p>
+      <p class="footer-tech">Built with passion for Platform Engineering</p>
     </div>
   </div>
 </footer>
 
 <script>
-// Override roles and terminal commands before script.js loads
-window.PORTFOLIO_ROLES = [
-  "Platform Engineering Enthusiast",
-  "Azure Cloud Engineer",
-  "Linux & Infrastructure Specialist",
-  "CI/CD Automation Engineer",
-  "DevOps & Platform Operations"
-];
+const roles=["Platform Engineering Enthusiast","Azure Cloud Engineer","Linux & Infrastructure Specialist","CI/CD Automation Engineer","DevOps & Platform Operations"];
+let rIdx=0,cIdx=0,deleting=false;
+const typingEl=document.getElementById('typing-text');
+function typeLoop(){
+  const word=roles[rIdx];
+  if(!deleting){
+    typingEl.textContent=word.slice(0,++cIdx);
+    if(cIdx===word.length){deleting=true;setTimeout(typeLoop,2200);return;}
+    setTimeout(typeLoop,65);
+  }else{
+    typingEl.textContent=word.slice(0,--cIdx);
+    if(cIdx===0){deleting=false;rIdx=(rIdx+1)%roles.length;setTimeout(typeLoop,400);return;}
+    setTimeout(typeLoop,38);
+  }
+}
+typeLoop();
 
-window.PORTFOLIO_COMMANDS = [
-  "$ az vm list",
-  "$ docker compose up -d",
-  "$ git push origin main",
-  "$ ssh admin@server",
-  "$ systemctl status nginx",
-  "$ gh workflow run deploy.yml"
+const cmds=[
+  {cmd:'$ az vm list',out:'[\n  { "name": "prod-vm-01", "powerState": "running" }\n]'},
+  {cmd:'$ docker compose up -d',out:'Network created\nStarting api-service ... done\nStarting nginx     ... done'},
+  {cmd:'$ git push origin main',out:'Counting objects: 5\nTo github.com:iam-abish/repo\n   main -> main'},
+  {cmd:'$ ssh admin@server',out:'Welcome to Ubuntu 22.04.3 LTS\nLast login: Sat May 30 09:14'},
+  {cmd:'$ systemctl status nginx',out:'* nginx.service\n  Active: active (running) since today\n  Main PID: 1024'},
+  {cmd:'$ gh workflow run deploy.yml',out:'Created workflow_dispatch event\nfor deploy.yml on main\nID: run-4821'},
 ];
+const termEl=document.getElementById('terminal-out');
+let ti=0,buf='',phase='cmd',pos=0;
+function termStep(){
+  const e=cmds[ti];
+  if(phase==='cmd'){
+    if(pos<e.cmd.length){buf+=e.cmd[pos++];termEl.textContent=buf;setTimeout(termStep,60);}
+    else{phase='out';pos=0;setTimeout(termStep,320);}
+  }else{
+    buf+='\n'+e.out+'\n\n';
+    termEl.textContent=buf;
+    ti=(ti+1)%cmds.length;phase='cmd';pos=0;
+    if(buf.split('\n').length>24){buf='';termEl.textContent='';}
+    setTimeout(termStep,1800);
+  }
+}
+termStep();
 </script>
-<script src="script.js"></script>
 </body>
 </html>
