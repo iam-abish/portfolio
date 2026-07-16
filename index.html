@@ -102,9 +102,10 @@ main{position:relative;z-index:1}
 .project-header{display:flex;align-items:flex-start;justify-content:space-between}
 .project-icon{width:42px;height:42px;border-radius:10px;background:var(--azure-dim);border:1px solid var(--azure-border);display:flex;align-items:center;justify-content:center;color:var(--azure-light);flex-shrink:0}
 .project-status{font-family:var(--font-mono);font-size:.7rem;padding:4px 10px;border-radius:100px;letter-spacing:.04em;white-space:nowrap}
-.project-card:nth-child(1) .project-status{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
-.project-card:nth-child(2) .project-status{background:var(--azure-dim);color:var(--azure-light);border:1px solid var(--azure-border)}
-.project-card:nth-child(3) .project-status{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
+.project-card:nth-child(1) .project-status{background:rgba(124,58,237,.1);color:#a78bfa;border:1px solid rgba(124,58,237,.3)}
+.project-card:nth-child(2) .project-status{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+.project-card:nth-child(3) .project-status{background:var(--azure-dim);color:var(--azure-light);border:1px solid var(--azure-border)}
+.project-card:nth-child(4) .project-status{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
 .project-title{font-size:.97rem;font-weight:600;color:#fff;letter-spacing:-.01em;line-height:1.35}
 .project-description{font-size:.85rem;color:var(--text-muted);line-height:1.8;flex:1}
 .project-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:4px}
@@ -207,7 +208,7 @@ main{position:relative;z-index:1}
 
 <header class="hero" id="home">
   <div class="hero-content">
-    <div class="hero-badge">Joining FutecX as Platform Engineer</div>
+    <div class="hero-badge">Platform Engineer at FuTecX</div>
     <h1 class="hero-title">
       <span class="name-line">Abish Packya</span>
     </h1>
@@ -253,21 +254,21 @@ main{position:relative;z-index:1}
     </div>
     <div class="about-grid">
       <div class="about-content">
-        <p class="lead">Aspiring Platform Engineer focused on cloud infrastructure, automation, and operational excellence.</p>
-        <p>My experience includes Linux administration, containerized applications, CI/CD automation, infrastructure planning, and deployment workflows. I enjoy building reliable systems and automating repetitive processes.</p>
-        <p>Currently beginning my professional journey as a Platform Engineer at FutecX, where I will be working with Azure cloud environments, infrastructure operations, and platform engineering practices.</p>
+        <p class="lead">Platform Engineer at FuTecX with expertise in Azure cloud infrastructure, Bicep Infrastructure-as-Code, and enterprise systems architecture.</p>
+        <p>My experience includes Linux administration, containerized applications, CI/CD automation, Azure infrastructure design, and deployment workflows. I specialize in building reliable, scalable systems and automating infrastructure operations through code.</p>
+        <p>At FuTecX, I designed and implemented enterprise-grade Azure Landing Zone infrastructure with 60+ resources supporting multiple web applications, focusing on security configurations, compliance controls, and operational excellence.</p>
         <div class="stats-grid">
           <div class="stat-item">
-            <div class="stat-value">10+</div>
-            <div class="stat-label">Infra Projects</div>
+            <div class="stat-value">60+</div>
+            <div class="stat-label">Azure Resources</div>
           </div>
           <div class="stat-item">
-            <div class="stat-value">Azure</div>
-            <div class="stat-label">Cloud Focus</div>
+            <div class="stat-value">Bicep</div>
+            <div class="stat-label">Infrastructure-as-Code</div>
           </div>
           <div class="stat-item">
-            <div class="stat-value">CI/CD</div>
-            <div class="stat-label">Automation</div>
+            <div class="stat-value">Enterprise</div>
+            <div class="stat-label">Security Focused</div>
           </div>
         </div>
       </div>
@@ -298,6 +299,8 @@ main{position:relative;z-index:1}
         </h3>
         <div class="skills-list">
           <div class="skill-tag">Microsoft Azure</div>
+          <div class="skill-tag">Bicep IaC</div>
+          <div class="skill-tag">Azure Management</div>
           <div class="skill-tag">Azure Virtual Machines</div>
           <div class="skill-tag">Azure Storage</div>
           <div class="skill-tag">Azure Networking</div>
@@ -342,6 +345,19 @@ main{position:relative;z-index:1}
       <h2 class="section-title">Featured Projects</h2>
     </div>
     <div class="projects-grid">
+      <article class="project-card">
+        <div class="project-header">
+          <div class="project-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18M5 4v16M19 4v16"/></svg>
+          </div>
+          <span class="project-status">Production</span>
+        </div>
+        <h3 class="project-title">Azure Landing Zone Infrastructure</h3>
+        <p class="project-description">Enterprise-grade Azure infrastructure designed and deployed for FuTecX. Architected and implemented 60+ Azure resources supporting multiple web applications with enterprise security configurations, compliance controls, and best practices.</p>
+        <div class="project-tags">
+          <span>Azure</span><span>Bicep IaC</span><span>Azure Management</span><span>Security</span>
+        </div>
+      </article>
       <article class="project-card">
         <div class="project-header">
           <div class="project-icon">
