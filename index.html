@@ -94,12 +94,16 @@ main,header,footer,nav{position:relative;z-index:1}
 .schematic text{font-family:var(--font-mono);fill:var(--ink-dim)}
 .schematic .lbl-strong{fill:var(--ink);font-weight:600}
 .schematic .conn{fill:none;stroke:var(--ink-dim);stroke-width:1;stroke-dasharray:400;stroke-dashoffset:400;animation:draw 1.6s ease forwards}
+.schematic .conn.flowing{stroke-dasharray:5 7;animation:flowDash 1s linear infinite}
+.flow-line{stroke-dasharray:5 7;animation:flowDash 1s linear infinite}
+@keyframes flowDash{to{stroke-dashoffset:-12}}
 .schematic .node{opacity:0;animation:fadein .5s ease forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes fadein{to{opacity:1}}
 @media(prefers-reduced-motion:reduce){
   .schematic .conn{stroke-dashoffset:0;animation:none}
   .schematic .node{opacity:1;animation:none}
+  .flow-line,.schematic .conn.flowing{animation:none}
 }
 
 /* ===== SECTIONS ===== */
@@ -163,30 +167,86 @@ main,header,footer,nav{position:relative;z-index:1}
 
 /* SYSTEMS SHEET */
 .systems-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1px;background:var(--ink-faint);border:1px solid var(--ink-faint)}
-.sys-panel{background:var(--blue-900);padding:26px}
+.sys-panel{background:var(--blue-900);padding:26px;display:flex;flex-direction:column}
 .sys-panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--ink-faint)}
 .sys-panel-head h4{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-dim);letter-spacing:.04em;font-weight:500}
-.status-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok)}
+.sys-panel-head-right{display:flex;align-items:center;gap:10px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);flex-shrink:0}
+.status-dot.idle{background:var(--ink-dim);box-shadow:none}
+
+.btn-run{font-family:var(--font-mono);font-size:.67rem;letter-spacing:.04em;text-transform:uppercase;background:transparent;color:var(--copper);border:1px solid var(--copper-border);padding:6px 12px;cursor:pointer;transition:all .15s}
+.btn-run:hover{background:var(--copper-dim)}
+.btn-run:disabled{opacity:.45;cursor:default;background:transparent}
+
 .pipeline-steps{display:flex;flex-direction:column;gap:9px}
-.step{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--ink-faint)}
+.step{border:1px solid var(--ink-faint);cursor:pointer;transition:border-color .2s}
+.step-row{display:flex;align-items:center;gap:12px;padding:10px 14px}
 .step-icon{font-size:.8rem;width:20px;text-align:center;font-family:var(--font-mono);flex-shrink:0}
 .step.completed{border-color:rgba(123,200,149,.25)}.step.completed .step-icon{color:var(--ok)}
 .step.running{border-color:var(--copper-border)}.step.running .step-icon{color:var(--copper)}
 .step.pending .step-icon{color:var(--ink-dim)}
 .step-info{display:flex;align-items:center;justify-content:space-between;flex:1}
 .step-name{font-size:.82rem;color:var(--ink);font-weight:500}
+.step-caret{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-dim);transition:transform .2s;margin-left:8px}
+.step.expanded .step-caret{transform:rotate(90deg)}
 .step-time{font-family:var(--font-mono);font-size:.71rem;color:var(--ink-dim)}
+.step-detail{max-height:0;overflow:hidden;transition:max-height .25s ease;border-top:1px solid transparent}
+.step.expanded .step-detail{max-height:60px;border-top-color:var(--ink-faint)}
+.step-detail p{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-dim);padding:10px 14px;line-height:1.6}
 .spinner{animation:spin 1.2s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+.pipeline-log{margin-top:14px;border:1px solid var(--ink-faint);background:rgba(0,0,0,.15);font-family:var(--font-mono);font-size:.7rem;color:var(--ink-dim);padding:10px 14px;height:76px;overflow-y:auto;line-height:1.7}
+.pipeline-log .log-line{white-space:pre-wrap}
+.pipeline-log .log-line.ok{color:var(--ok)}
+.pipeline-log::-webkit-scrollbar{width:6px}
+.pipeline-log::-webkit-scrollbar-thumb{background:var(--ink-faint)}
+
 .coord-map{position:relative;height:170px;border:1px solid var(--ink-faint);background-image:linear-gradient(var(--ink-faint2) 1px,transparent 1px),linear-gradient(90deg,var(--ink-faint2) 1px,transparent 1px);background-size:22px 22px}
-.coord-marker{position:absolute;transform:translate(-50%,-50%);text-align:center}
-.coord-dot{width:7px;height:7px;background:var(--copper);position:relative;margin:0 auto}
+.coord-marker{position:absolute;transform:translate(-50%,-50%);text-align:center;cursor:pointer;background:none;border:none;padding:6px;font:inherit}
+.coord-dot{width:7px;height:7px;background:var(--copper);position:relative;margin:0 auto;transition:transform .15s}
 .coord-dot::after{content:'';position:absolute;inset:-5px;border:1px solid var(--copper);opacity:0;animation:pulseAnim 2.4s ease-out infinite}
 @keyframes pulseAnim{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.6);opacity:0}}
-.coord-label{font-family:var(--font-mono);font-size:.62rem;color:var(--ink-dim);margin-top:8px;white-space:nowrap;letter-spacing:.03em}
+.coord-label{font-family:var(--font-mono);font-size:.62rem;color:var(--ink-dim);margin-top:8px;white-space:nowrap;letter-spacing:.03em;transition:color .15s}
+.coord-marker.active .coord-dot{transform:scale(1.6);background:var(--ink)}
+.coord-marker.active .coord-label{color:var(--ink);font-weight:600}
+.coord-marker:hover .coord-label{color:var(--ink)}
 
-/* CONTACT title block */
+.region-info{margin-top:14px;border:1px solid var(--ink-faint);padding:14px 16px;font-family:var(--font-mono);font-size:.72rem;color:var(--ink-dim);flex:1}
+.region-info .ri-name{color:var(--ink);font-size:.8rem;font-weight:600;margin-bottom:8px;letter-spacing:.02em}
+.region-info .ri-row{display:flex;justify-content:space-between;padding:3px 0}
+.region-info .ri-row span:last-child{color:var(--ink)}
+.region-hint{color:var(--ink-dim);opacity:.75}
+
+/* ===== MOTION ===== */
+@keyframes gridDrift{0%{background-position:0 0}100%{background-position:64px 64px}}
+.grid-bg{animation:gridDrift 26s linear infinite}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .65s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+.nav-links a{position:relative}
+.nav-links a::after{content:'';position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:var(--copper);transition:right .25s ease}
+.nav-links a:hover::after{right:0}
+
+.proj-sheet{transition:border-color .25s ease,transform .25s ease}
+.proj-sheet:hover{border-color:var(--copper-border);transform:translateY(-2px)}
+.sec-item{transition:background .25s ease}
+.sec-item:hover{background:var(--blue-700)}
+.legend-group{transition:background .25s ease}
+.legend-group:hover{background:var(--blue-650)}
+.stat-item{transition:background .2s ease}
+.stat-item:hover{background:rgba(228,118,61,.06)}
+.btn-primary,.btn-secondary{transition:all .18s ease,transform .18s ease}
+.btn-primary:hover,.btn-secondary:hover{transform:translateY(-1px)}
+
+@media(prefers-reduced-motion:reduce){
+  .grid-bg{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+  .schematic .conn{stroke-dashoffset:0;animation:none}
+  .flow-line,.schematic .conn.flowing{animation:none}
+  .schematic .node{opacity:1;animation:none}
+}
 .title-block{border:1px solid var(--ink-faint)}
 .tb-top{padding:34px;border-bottom:1px solid var(--ink-faint)}
 .tb-lead{font-size:1.05rem;color:var(--ink-dim);line-height:1.8;max-width:600px}
@@ -324,7 +384,7 @@ main,header,footer,nav{position:relative;z-index:1}
         <p>At FuTecX, I designed and deployed an enterprise-grade Azure Landing Zone spanning 60+ resources across multiple web applications, with security and compliance controls built in from the start. More recently, I built the infrastructure-as-code that provisions and manages agents on Azure AI Foundry, now running in production.</p>
         <div class="stat-strip">
           <div class="stat-item">
-            <div class="stat-value">60+</div>
+            <div class="stat-value" data-count-to="60" data-count-suffix="+">0</div>
             <div class="stat-label">Resources in the Landing Zone</div>
           </div>
           <div class="stat-item">
@@ -412,12 +472,12 @@ main,header,footer,nav{position:relative;z-index:1}
           <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Landing zone schematic">
             <rect x="90" y="8" width="80" height="30" rx="2" fill="none" stroke="var(--copper)" stroke-width="1.2"/>
             <text x="130" y="27" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="var(--ink)">MGMT GROUP</text>
-            <path d="M130,38 L130,52 M130,52 L60,52 L60,64 M130,52 L200,52 L200,64" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
+            <path d="M130,38 L130,52 M130,52 L60,52 L60,64 M130,52 L200,52 L200,64" fill="none" stroke="var(--ink-dim)" stroke-width="1" class="flow-line"/>
             <rect x="20" y="64" width="80" height="26" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <text x="60" y="81" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="var(--ink-dim)">PROD LZ</text>
             <rect x="160" y="64" width="80" height="26" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <text x="200" y="81" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="var(--ink-dim)">NON-PROD LZ</text>
-            <path d="M60,90 L60,104 M200,90 L200,104" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
+            <path d="M60,90 L60,104 M200,90 L200,104" fill="none" stroke="var(--ink-dim)" stroke-width="1" class="flow-line"/>
             <rect x="20" y="104" width="35" height="22" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <rect x="63" y="104" width="35" height="22" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <rect x="160" y="104" width="35" height="22" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
@@ -443,16 +503,16 @@ main,header,footer,nav{position:relative;z-index:1}
           <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Azure AI Foundry agent platform schematic">
             <rect x="80" y="10" width="100" height="30" rx="2" fill="none" stroke="var(--copper)" stroke-width="1.2"/>
             <text x="130" y="29" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="var(--ink)">AI FOUNDRY</text>
-            <path d="M130,40 L130,54" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
-            <path d="M130,54 L50,54 L50,66 M130,54 L130,66 M130,54 L210,54 L210,66" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
+            <path d="M130,40 L130,54" fill="none" stroke="var(--ink-dim)" stroke-width="1" class="flow-line"/>
+            <path d="M130,54 L50,54 L50,66 M130,54 L130,66 M130,54 L210,54 L210,66" fill="none" stroke="var(--ink-dim)" stroke-width="1" class="flow-line"/>
             <rect x="20" y="66" width="60" height="24" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <text x="50" y="82" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="var(--ink-dim)">MODEL DEPLOY</text>
             <rect x="100" y="66" width="60" height="24" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <text x="130" y="82" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="var(--ink-dim)">AGENT DEF</text>
             <rect x="180" y="66" width="60" height="24" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <text x="210" y="82" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="var(--ink-dim)">POLICY</text>
-            <path d="M50,90 L50,110 M130,90 L130,110 M210,90 L210,110 M50,110 L210,110" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
-            <path d="M130,110 L130,124" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
+            <path d="M50,90 L50,110 M130,90 L130,110 M210,90 L210,110 M50,110 L210,110" fill="none" stroke="var(--ink-dim)" stroke-width="1" class="flow-line"/>
+            <path d="M130,110 L130,124" fill="none" stroke="var(--ink-dim)" stroke-width="1" class="flow-line"/>
             <rect x="95" y="124" width="70" height="22" rx="2" fill="none" stroke="var(--ink-faint)" stroke-width="1"/>
             <text x="130" y="139" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="var(--ink-dim)">CI/CD PIPELINE</text>
             <text x="130" y="164" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="var(--ink-dim)">BICEP + TERRAFORM &#183; PRODUCTION</text>
@@ -502,20 +562,60 @@ main,header,footer,nav{position:relative;z-index:1}
     </div>
     <div class="systems-grid">
       <div class="sys-panel">
-        <div class="sys-panel-head"><h4>DEPLOYMENT PIPELINE</h4><span class="status-dot"></span></div>
-        <div class="pipeline-steps">
-          <div class="step completed"><div class="step-icon">&#10003;</div><div class="step-info"><div class="step-name">Build</div><div class="step-time">2m 14s</div></div></div>
-          <div class="step completed"><div class="step-icon">&#10003;</div><div class="step-info"><div class="step-name">Validate (what-if)</div><div class="step-time">4m 32s</div></div></div>
-          <div class="step running"><div class="step-icon spinner">&#9676;</div><div class="step-info"><div class="step-name">Deploy</div><div class="step-time">1m 08s</div></div></div>
-          <div class="step pending"><div class="step-icon">&#9675;</div><div class="step-info"><div class="step-name">Verify</div><div class="step-time">&#8212;</div></div></div>
+        <div class="sys-panel-head">
+          <h4>DEPLOYMENT PIPELINE</h4>
+          <div class="sys-panel-head-right">
+            <span class="status-dot idle" id="pipeline-dot"></span>
+            <button class="btn-run" id="pipeline-run">Run Deployment</button>
+          </div>
+        </div>
+        <div class="pipeline-steps" id="pipeline-steps">
+          <div class="step pending" data-step="0">
+            <div class="step-row">
+              <div class="step-icon">&#9675;</div>
+              <div class="step-info"><div class="step-name">Build</div><div class="step-time">&#8212;</div></div>
+              <span class="step-caret">&#8250;</span>
+            </div>
+            <div class="step-detail"><p>bicep build main.bicep &#8594; template validated, 0 errors</p></div>
+          </div>
+          <div class="step pending" data-step="1">
+            <div class="step-row">
+              <div class="step-icon">&#9675;</div>
+              <div class="step-info"><div class="step-name">Validate (what-if)</div><div class="step-time">&#8212;</div></div>
+              <span class="step-caret">&#8250;</span>
+            </div>
+            <div class="step-detail"><p>az deployment what-if &#8594; 3 resources to modify, 0 to delete</p></div>
+          </div>
+          <div class="step pending" data-step="2">
+            <div class="step-row">
+              <div class="step-icon">&#9675;</div>
+              <div class="step-info"><div class="step-name">Deploy</div><div class="step-time">&#8212;</div></div>
+              <span class="step-caret">&#8250;</span>
+            </div>
+            <div class="step-detail"><p>Applying template to resource group &#8594; provisioning in progress</p></div>
+          </div>
+          <div class="step pending" data-step="3">
+            <div class="step-row">
+              <div class="step-icon">&#9675;</div>
+              <div class="step-info"><div class="step-name">Verify</div><div class="step-time">&#8212;</div></div>
+              <span class="step-caret">&#8250;</span>
+            </div>
+            <div class="step-detail"><p>Post-deploy health checks &#8594; all resources healthy</p></div>
+          </div>
+        </div>
+        <div class="pipeline-log" id="pipeline-log">
+          <div class="log-line">&gt; click a step for details, or run the pipeline &#8594;</div>
         </div>
       </div>
       <div class="sys-panel">
         <div class="sys-panel-head"><h4>ACTIVE REGIONS</h4><span class="status-dot"></span></div>
-        <div class="coord-map">
-          <div class="coord-marker" style="left:22%;top:55%;"><div class="coord-dot"></div><div class="coord-label">CENTRAL INDIA</div></div>
-          <div class="coord-marker" style="left:55%;top:38%;"><div class="coord-dot"></div><div class="coord-label">WEST EUROPE</div></div>
-          <div class="coord-marker" style="left:80%;top:60%;"><div class="coord-dot"></div><div class="coord-label">EAST US</div></div>
+        <div class="coord-map" id="coord-map">
+          <button class="coord-marker" style="left:22%;top:55%;" data-region="0"><div class="coord-dot"></div><div class="coord-label">CENTRAL INDIA</div></button>
+          <button class="coord-marker" style="left:55%;top:38%;" data-region="1"><div class="coord-dot"></div><div class="coord-label">WEST EUROPE</div></button>
+          <button class="coord-marker" style="left:80%;top:60%;" data-region="2"><div class="coord-dot"></div><div class="coord-label">EAST US</div></button>
+        </div>
+        <div class="region-info" id="region-info">
+          <p class="region-hint">Click a region marker for deployment details.</p>
         </div>
       </div>
     </div>
@@ -585,6 +685,218 @@ function typeLoop(){
   }
 }
 typeLoop();
+
+/* Hero schematic: switch connector lines to continuous flowing motion once drawn in */
+const heroConns = document.querySelectorAll('.schematic .conn');
+heroConns.forEach(path => {
+  path.addEventListener('animationend', (e) => {
+    if(e.animationName === 'draw') path.classList.add('flowing');
+  });
+});
+
+/* ===== Deployment pipeline ===== */
+const pipelineSteps = Array.from(document.querySelectorAll('#pipeline-steps .step'));
+const pipelineLog = document.getElementById('pipeline-log');
+const pipelineDot = document.getElementById('pipeline-dot');
+const pipelineRunBtn = document.getElementById('pipeline-run');
+const stepLogLines = [
+  'bicep build main.bicep — template validated, 0 errors',
+  'az deployment what-if — 3 resources to modify, 0 to delete',
+  'applying template to resource group — provisioning...',
+  'post-deploy health checks — all resources healthy'
+];
+const stepTimes = ['2m 14s','4m 32s','1m 08s','0m 41s'];
+let pipelineRunning = false;
+
+function logLine(text, ok){
+  const div = document.createElement('div');
+  div.className = 'log-line' + (ok ? ' ok' : '');
+  div.textContent = '> ' + text;
+  pipelineLog.appendChild(div);
+  pipelineLog.scrollTop = pipelineLog.scrollHeight;
+}
+
+function setStepState(step, state){
+  step.classList.remove('pending','running','completed');
+  step.classList.add(state);
+  const icon = step.querySelector('.step-icon');
+  const time = step.querySelector('.step-time');
+  const idx = +step.dataset.step;
+  if(state === 'pending'){ icon.innerHTML = '&#9675;'; icon.classList.remove('spinner'); time.textContent = '—'; }
+  if(state === 'running'){ icon.innerHTML = '&#9676;'; icon.classList.add('spinner'); time.textContent = 'running…'; }
+  if(state === 'completed'){ icon.innerHTML = '&#10003;'; icon.classList.remove('spinner'); time.textContent = stepTimes[idx]; }
+}
+
+function toggleStepDetail(step){
+  const wasExpanded = step.classList.contains('expanded');
+  pipelineSteps.forEach(s => s.classList.remove('expanded'));
+  if(!wasExpanded) step.classList.add('expanded');
+}
+
+pipelineSteps.forEach(step => {
+  step.addEventListener('click', () => toggleStepDetail(step));
+});
+
+function runPipeline(){
+  if(pipelineRunning) return;
+  pipelineRunning = true;
+  pipelineRunBtn.disabled = true;
+  pipelineRunBtn.textContent = 'Running…';
+  pipelineDot.classList.remove('idle');
+  pipelineLog.innerHTML = '';
+  logLine('deployment started');
+  pipelineSteps.forEach(s => setStepState(s, 'pending'));
+
+  let i = 0;
+  function runNext(){
+    if(i >= pipelineSteps.length){
+      logLine('deployment complete — all steps healthy', true);
+      pipelineRunning = false;
+      pipelineRunBtn.disabled = false;
+      pipelineRunBtn.textContent = 'Run Deployment';
+      pipelineDot.classList.add('idle');
+      return;
+    }
+    const step = pipelineSteps[i];
+    setStepState(step, 'running');
+    logLine(stepLogLines[i]);
+    setTimeout(() => {
+      setStepState(step, 'completed');
+      logLine((step.querySelector('.step-name').textContent) + ' — done (' + stepTimes[i] + ')', true);
+      i++;
+      setTimeout(runNext, 350);
+    }, 900);
+  }
+  runNext();
+}
+
+pipelineRunBtn.addEventListener('click', runPipeline);
+
+/* Auto-play the pipeline once, the first time it scrolls into view */
+const pipelinePanel = document.getElementById('pipeline-steps');
+if(pipelinePanel && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const pipelineIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        runPipeline();
+        pipelineIO.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  pipelineIO.observe(pipelinePanel);
+}
+
+/* ===== Region map ===== */
+const regionData = [
+  { name: 'CENTRAL INDIA', rg: 'rg-prod-cin-01', resources: 24, latency: '4ms', status: 'Healthy' },
+  { name: 'WEST EUROPE', rg: 'rg-prod-weu-01', resources: 18, latency: '112ms', status: 'Healthy' },
+  { name: 'EAST US', rg: 'rg-nonprod-eus-01', resources: 9, latency: '186ms', status: 'Healthy' }
+];
+const regionInfo = document.getElementById('region-info');
+const markers = document.querySelectorAll('.coord-marker');
+let regionAutoCycle = null;
+let regionCycleIndex = 0;
+
+function selectRegion(index){
+  markers.forEach(m => m.classList.remove('active'));
+  const marker = document.querySelector('.coord-marker[data-region="' + index + '"]');
+  if(!marker) return;
+  marker.classList.add('active');
+  const d = regionData[index];
+  regionInfo.innerHTML =
+    '<div class="ri-name">' + d.name + '</div>' +
+    '<div class="ri-row"><span>Resource group</span><span>' + d.rg + '</span></div>' +
+    '<div class="ri-row"><span>Resources</span><span>' + d.resources + '</span></div>' +
+    '<div class="ri-row"><span>Latency (from IN)</span><span>' + d.latency + '</span></div>' +
+    '<div class="ri-row"><span>Status</span><span>' + d.status + '</span></div>';
+}
+
+function stopRegionAutoCycle(){
+  if(regionAutoCycle){ clearInterval(regionAutoCycle); regionAutoCycle = null; }
+}
+
+markers.forEach(marker => {
+  marker.addEventListener('click', () => {
+    stopRegionAutoCycle();
+    const alreadyActive = marker.classList.contains('active');
+    markers.forEach(m => m.classList.remove('active'));
+    if(alreadyActive){
+      regionInfo.innerHTML = '<p class="region-hint">Click a region marker for deployment details.</p>';
+      return;
+    }
+    selectRegion(+marker.dataset.region);
+  });
+});
+
+/* Auto-cycle through regions once the map is in view, until the person clicks one */
+const coordMap = document.getElementById('coord-map');
+if(coordMap && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const mapIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting && !regionAutoCycle){
+        selectRegion(regionCycleIndex);
+        regionAutoCycle = setInterval(() => {
+          regionCycleIndex = (regionCycleIndex + 1) % regionData.length;
+          selectRegion(regionCycleIndex);
+        }, 2800);
+      }
+    });
+  }, { threshold: 0.5 });
+  mapIO.observe(coordMap);
+}
+
+/* ===== Scroll-triggered motion ===== */
+const revealGroups = [
+  '.sheet-head',
+  '.about-content',
+  '.legend-panel',
+  '.legend-group',
+  '.proj-sheet',
+  '.sec-item',
+  '.sys-panel',
+  '.title-block'
+];
+const revealEls = document.querySelectorAll(revealGroups.join(','));
+revealEls.forEach(el => el.classList.add('reveal'));
+// stagger elements that share a parent/group
+const staggerSelectors = ['.legend-group', '.proj-sheet', '.sec-item'];
+staggerSelectors.forEach(sel => {
+  document.querySelectorAll(sel).forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.1) + 's';
+  });
+});
+
+const counters = document.querySelectorAll('[data-count-to]');
+function runCounter(el){
+  const target = parseInt(el.dataset.countTo, 10);
+  const suffix = el.dataset.countSuffix || '';
+  const duration = 900;
+  const start = performance.now();
+  function tick(now){
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * target) + suffix;
+    if(p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        if(entry.target.hasAttribute('data-count-to')) runCounter(entry.target);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => io.observe(el));
+  counters.forEach(el => io.observe(el));
+} else {
+  revealEls.forEach(el => el.classList.add('in'));
+  counters.forEach(el => runCounter(el));
+}
 </script>
 </body>
 </html>
